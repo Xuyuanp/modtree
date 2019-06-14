@@ -2,10 +2,17 @@ package main
 
 import (
 	"encoding/csv"
+	"flag"
 	"fmt"
 	"io"
 	"os"
 )
+
+var uniq = flag.Bool("u", false, "uniq")
+
+func init() {
+	flag.Parse()
+}
 
 type Position int
 
@@ -48,7 +55,9 @@ func buildTree(records [][]string) *Node {
 		if !ok {
 			return
 		}
-		delete(linearMap, n.name)
+		if *uniq {
+			delete(linearMap, n.name)
+		}
 		for _, dep := range deps {
 			child := &Node{name: dep}
 			f(child)
